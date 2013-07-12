@@ -109,7 +109,7 @@
     if (composeViewControllerClass == nil ||
         [composeViewControllerClass isAvailableForServiceType:SLServiceTypeFacebook] == NO) {
         if (handler) {
-            handler(FBNativeDialogResultError, [self createError:FBErrorNativeDialogNotSupported]);
+                  handler(FBNativeDialogResultError, [self createError:FBErrorNativeDialogNotSupported]);
         }
         return nil;
     }

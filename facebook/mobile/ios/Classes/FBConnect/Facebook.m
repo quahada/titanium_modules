@@ -345,24 +345,29 @@ NSArray * noniOS6Permissions = nil;
 				 completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
         switch (status) {
             case FBSessionStateOpen:
+
+                NSLog(@"[INFO] Ti.Facebook.m: FBSessionStateOpen");
                 // call the legacy session delegate
                 [self fbDialogLogin:session.accessToken expirationDate:session.expirationDate];
                 break;
             case FBSessionStateClosedLoginFailed:
                 { // prefer to keep decls near to their use
                     
+                    NSLog(@"[INFO] Ti.Facebook.m: FBSessionStateClosedLoginFailed ERROR: %@", [error description]);
                     // unpack the error code and reason in order to compute cancel bool
                     NSString *errorCode = [[error userInfo] objectForKey:FBErrorLoginFailedOriginalErrorCode];
                     NSString *errorReason = [[error userInfo] objectForKey:FBErrorLoginFailedReason];
                     BOOL userDidCancel = !errorCode && (!errorReason ||
                                                         [errorReason isEqualToString:FBErrorLoginFailedReasonInlineCancelledValue]);
-                    
+
                     // call the legacy session delegate
                     [self fbDialogNotLogin:userDidCancel];
                 }
                 break;
             // presently extension, log-out and invalidation are being implemented in the Facebook class 
             default:
+                    NSLog(@"[INFO] Ti.Facebook.m: authorize status other");
+                    NSLog(@"[INFO] Ti.Facebook.m: authorize status other ERROR: %@", [error description]);
                 break; // so we do nothing in response to those state transitions
         }
     }];
@@ -800,7 +805,13 @@ NSArray * noniOS6Permissions = nil;
  */
 - (void)fbDialogNotLogin:(BOOL)cancelled {
     if ([self.sessionDelegate respondsToSelector:@selector(fbDidNotLogin:)]) {
+        NSLog(@"[INFO] Ti.Facebook.m: fbDialogNotLogin respondsToSelector");
         [self.sessionDelegate fbDidNotLogin:cancelled];
+        //[self.sessionDelegate fbSessionInvalidated];
+        
+    }
+    else{
+        NSLog(@"[INFO] Ti.Facebook.m: fbDialogNotLogin else");
     }
 }
 

@@ -778,7 +778,15 @@ if(![x isKindOfClass:[t class]]){ \
 - (void)fbDidNotLogin:(BOOL)cancelled
 {
 	VerboseLog(@"[DEBUG] facebook fbDidNotLogin: cancelled=%d",cancelled);
+	NSLog(@"[INFO] Ti.FacebookModule.m: fbDidNotLogin cancelled: %d",cancelled);
 	loggedIn = NO;
+
+	//NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	//[defaults removeObjectForKey:@"FBAccessToken"];
+	//[defaults removeObjectForKey:@"FBSessionExpires"];
+	//[defaults synchronize];
+	//[self _unsave];
+
 	[self fireLoginChange];
 	[self fireLogin:nil cancelled:cancelled withError:nil];
 }
@@ -805,6 +813,7 @@ if(![x isKindOfClass:[t class]]){ \
 
 - (void)fbSessionInvalidated;
 {
+	NSLog(@"[INFO] Ti.FacebookModule.m: fbSessionInvalidated");
 	loggedIn = NO;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults removeObjectForKey:@"FBAccessToken"];
